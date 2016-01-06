@@ -1,6 +1,6 @@
 var multiaddr = require('multiaddr')
 
-module.exports.all = function (test, common) {
+module.exports.all = function (test, common, listenerOpts, dialerOpts) {
   test('a test', function (t) {
     common.setup(test, function (err, transport) {
       t.plan(5)
@@ -15,16 +15,15 @@ module.exports.all = function (test, common) {
           t.pass('listener closed successfully')
           t.end()
         })
-      })
+      }, listenerOpts)
 
       listener.listen(maddr.nodeAddress().port, function () {
         t.pass('started listening')
-        var stream = transport.dial(maddr, {
-          ready: function () {
-            t.pass('dialed successfuly')
-            stream.end()
-          }
-        })
+        dialerOpts.ready = function () {
+          t.pass('dialed successfuly')
+          stream.end()
+        }
+        var stream = transport.dial(maddr, dialerOpts)
       })
     })
   })
