@@ -1,8 +1,12 @@
 var multiaddr = require('multiaddr')
 
-module.exports.all = function (test, common, listenerOpts, dialerOpts) {
+module.exports.all = function (test, common) {
   test('a test', function (t) {
-    common.setup(test, function (err, transport) {
+    common.setup(test, function (err, transport, listenerOpts, dialerOpts) {
+      // defaults
+      listenerOpts = listenerOpts || {}
+      dialerOpts = dialerOpts || {}
+
       t.plan(5)
       t.ifError(err)
 
