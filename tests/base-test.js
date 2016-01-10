@@ -2,15 +2,14 @@ var multiaddr = require('multiaddr')
 
 module.exports.all = function (test, common) {
   test('a test', function (t) {
-    common.setup(test, function (err, transport, listenerOpts, dialerOpts) {
+
+    common.setup(test, function (err, transport, maddr, listenerOpts, dialerOpts) {
       // defaults
       listenerOpts = listenerOpts || {}
       dialerOpts = dialerOpts || {}
 
       t.plan(5)
       t.ifError(err)
-
-      var maddr = multiaddr('/ip4/127.0.0.1/tcp/9050')
 
       var listener = transport.createListener(function (stream) {
         t.pass('received incoming connection')
