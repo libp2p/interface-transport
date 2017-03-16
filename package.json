@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/diasdavid/interface-transport",
   "devDependencies": {
-    "aegir": "^10.0.0"
+    "aegir": "^11.0.0"
   },
   "dependencies": {
     "chai": "^3.5.0",
