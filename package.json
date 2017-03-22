@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/libp2p/interface-transport",
   "devDependencies": {
-    "aegir": "^11.0.0",
+    "aegir": "^11.0.1",
     "dirty-chai": "^1.2.2"
   },
   "dependencies": {
