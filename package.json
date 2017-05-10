@@ -39,7 +39,7 @@
     "multiaddr": "^2.2.2",
     "pull-goodbye": "0.0.1",
     "pull-serializer": "^0.3.2",
-    "pull-stream": "^3.5.0"
+    "pull-stream": "^3.5.1"
   },
   "contributors": [
     "David Dias <daviddias.p@gmail.com>",
