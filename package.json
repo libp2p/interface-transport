@@ -35,7 +35,7 @@
     "dirty-chai": "^1.2.2"
   },
   "dependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.0.0",
     "multiaddr": "^2.2.2",
     "pull-goodbye": "0.0.1",
     "pull-serializer": "^0.3.2",
