@@ -84,7 +84,7 @@ A valid (read: that follows the interface defined) transport, must implement the
 
 ### Creating a transport instance
 
-- `JavaScript` - `var transport = new Transport([options])`
+- **JavaScript** - `var transport = new Transport([options])`
 
 Creates a new Transport instance. `options` is a optional JavaScript object, might include the necessary parameters for the transport instance.
 
@@ -92,7 +92,7 @@ Creates a new Transport instance. `options` is a optional JavaScript object, mig
 
 ### Dial to another peer
 
-- `JavaScript` - `var conn = transport.dial(multiaddr, [options, callback])`
+- **JavaScript** - `var conn = transport.dial(multiaddr, [options, callback])`
 
 This method dials a transport to the Peer listening on `multiaddr`.
 
@@ -108,7 +108,7 @@ This method dials a transport to the Peer listening on `multiaddr`.
 
 ### Create a listener
 
-- `JavaScript` - `var listener = transport.createListener([options], handlerFunction)`
+- **JavaScript** - `var listener = transport.createListener([options], handlerFunction)`
 
 This method creates a listener on the transport.
 
@@ -125,7 +125,7 @@ The listener object created, can emit the following events:
 
 ### Start a listener
 
-- `JavaScript` - `listener.listen(multiaddr, [callback])`
+- **JavaScript** - `listener.listen(multiaddr, [callback])`
 
 This method puts the listener in `listening` mode, waiting for incoming connections.
 
@@ -135,13 +135,13 @@ This method puts the listener in `listening` mode, waiting for incoming connecti
 
 ### Get listener addrs
 
-- `JavaScript` - `listener.getAddrs(callback)`
+- **JavaScript** - `listener.getAddrs(callback)`
 
 This method retrieves the addresses in which this listener is listening. Useful for when listening on port 0 or any interface (0.0.0.0).
 
 ### Stop a listener
 
-- `JavaScript` - `listener.close([options, callback])`
+- **JavaScript** - `listener.close([options, callback])`
 
 This method closes the listener so that no more connections can be open on this transport instance.
 
