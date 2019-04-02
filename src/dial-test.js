@@ -5,9 +5,10 @@ const chai = require('chai')
 const dirtyChai = require('dirty-chai')
 const expect = chai.expect
 chai.use(dirtyChai)
-const pull = require('pull-stream')
-const goodbye = require('pull-goodbye')
-const serializer = require('pull-serializer')
+
+const goodbye = require('it-goodbye')
+const { collect } = require('streaming-iterables')
+const pipe = require('it-pipe')
 
 module.exports = (common) => {
   describe('dial', () => {
@@ -15,59 +16,38 @@ module.exports = (common) => {
     let transport
     let listener
 
-    before((done) => {
-      common.setup((err, _transport, _addrs) => {
-        if (err) return done(err)
-        transport = _transport
-        addrs = _addrs
-        done()
-      })
+    before(async () => {
+      ({ transport, addrs } = await common.setup())
     })
 
-    after((done) => {
-      common.teardown(done)
+    after(() => common.teardown && common.teardown())
+
+    beforeEach(() => {
+      listener = transport.createListener((conn) => pipe(conn, conn))
+      return listener.listen(addrs[0])
     })
 
-    beforeEach((done) => {
-      listener = transport.createListener((conn) => {
-        pull(conn, conn)
-      })
-      listener.listen(addrs[0], done)
+    afterEach(() => listener.close())
+
+    it('simple', async () => {
+      const conn = await transport.dial(addrs[0])
+
+      const s = goodbye({ source: ['hey'], sink: collect })
+
+      const result = await pipe(s, conn, s)
+
+      expect(result.length).to.equal(1)
+      expect(result[0].toString()).to.equal('hey')
     })
 
-    afterEach((done) => {
-      listener.close(done)
-    })
-
-    it('simple', (done) => {
-      const s = serializer(goodbye({
-        source: pull.values(['hey']),
-        sink: pull.collect((err, values) => {
-          expect(err).to.not.exist()
-          expect(
-            values
-          ).to.be.eql(
-            ['hey']
-          )
-          done()
-        })
-      }))
-
-      pull(
-        s,
-        transport.dial(addrs[0]),
-        s
-      )
-    })
-
-    it('to non existent listener', (done) => {
-      pull(
-        transport.dial(addrs[1]),
-        pull.onEnd((err) => {
-          expect(err).to.exist()
-          done()
-        })
-      )
+    it('to non existent listener', async () => {
+      try {
+        await transport.dial(addrs[1])
+      } catch (_) {
+        // Success: expected an error to be throw
+        return
+      }
+      expect.fail('Did not throw error')
     })
   })
 }
