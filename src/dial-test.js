@@ -9,15 +9,18 @@ chai.use(dirtyChai)
 const goodbye = require('it-goodbye')
 const { collect } = require('streaming-iterables')
 const pipe = require('it-pipe')
+const AbortController = require('abort-controller')
+const AbortError = require('./errors').AbortError
 
 module.exports = (common) => {
   describe('dial', () => {
     let addrs
     let transport
+    let connector
     let listener
 
     before(async () => {
-      ({ transport, addrs } = await common.setup())
+      ({ addrs, transport, connector } = await common.setup())
     })
 
     after(() => common.teardown && common.teardown())
@@ -47,7 +50,41 @@ module.exports = (common) => {
         // Success: expected an error to be throw
         return
       }
-      expect.fail('Did not throw error')
+      expect.fail('Did not throw error attempting to connect to non-existent listener')
+    })
+
+    it('cancel before dialing', async () => {
+      const controller = new AbortController()
+      controller.abort()
+      const socket = transport.dial(addrs[0], { signal: controller.signal })
+
+      try {
+        await socket
+      } catch (err) {
+        expect(err.code).to.eql(AbortError.code)
+        return
+      }
+      expect.fail('Did not throw error with code ' + AbortError.code)
+    })
+
+    it('cancel while dialing', async () => {
+      // Add a delay to connect() so that we can cancel while the dial is in
+      // progress
+      connector.delay(100)
+
+      const controller = new AbortController()
+      const socket = transport.dial(addrs[0], { signal: controller.signal })
+      setTimeout(() => controller.abort(), 50)
+
+      try {
+        await socket
+      } catch (err) {
+        expect(err.code).to.eql(AbortError.code)
+        return
+      } finally {
+        connector.restore()
+      }
+      expect.fail('Did not throw error with code ' + AbortError.code)
     })
   })
 }
