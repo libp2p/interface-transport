@@ -61,7 +61,7 @@ module.exports = (common) => {
 
         listener.on('connection', async (conn) => {
           expect(conn).to.exist()
-          listener.close()
+          await listener.close()
           done()
         });
 
@@ -82,9 +82,9 @@ module.exports = (common) => {
 
       it('error', (done) => {
         const listener = transport.createListener()
-        listener.on('error', (err) => {
+        listener.on('error', async (err) => {
           expect(err).to.exist()
-          listener.close()
+          await listener.close()
           done()
         })
         listener.emit('error', new Error('my err'))
