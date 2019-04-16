@@ -118,9 +118,9 @@ This method uses a transport to dial a Peer listening on `multiaddr`.
 
 `multiaddr` must be of the type [`multiaddr`](https://www.npmjs.com/multiaddr).
 
-`conn` must implement the [interface-connection](https://github.com/libp2p/interface-connection) interface.
-
 `[options]` the options that may be passed to the dial. Must support the `signal` option (see below)
+
+`conn` must implement the [interface-connection](https://github.com/libp2p/interface-connection) interface.
 
 The dial may throw an `Error` instance if there was a problem connecting to the `multiaddr`.
 
