@@ -63,9 +63,9 @@ module.exports = (common) => {
           expect(conn).to.exist()
           await listener.close()
           done()
-        });
+        })
 
-        (async () => {
+        ;(async () => {
           await listener.listen(addrs[0])
           await transport.dial(addrs[0])
         })()
@@ -92,9 +92,9 @@ module.exports = (common) => {
 
       it('close', (done) => {
         const listener = transport.createListener()
-        listener.on('close', done);
+        listener.on('close', done)
 
-        (async () => {
+        ;(async () => {
           await listener.listen(addrs[0])
           await listener.close()
         })()
