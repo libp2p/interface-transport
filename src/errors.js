@@ -13,7 +13,7 @@ class AbortError extends Error {
 
 class AllListenersFailedError extends Error {
   constructor () {
-    super('AllListenersFailedError')
+    super('All listeners failed to listen on any addresses, please verify the addresses you provided are correct')
     this.code = AllListenersFailedError.code
   }
 
