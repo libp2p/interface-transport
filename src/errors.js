@@ -11,6 +11,18 @@ class AbortError extends Error {
   }
 }
 
+class AllListenersFailedError extends Error {
+  constructor () {
+    super('AllListenersFailedError')
+    this.code = AllListenersFailedError.code
+  }
+
+  static get code () {
+    return 'ERR_ALL_LISTENERS_FAILED'
+  }
+}
+
 module.exports = {
-  AbortError
+  AbortError,
+  AllListenersFailedError
 }
