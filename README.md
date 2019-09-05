@@ -84,10 +84,6 @@ describe('compliance', () => {
 })
 ```
 
-## Go
-
-> WIP
-
 # API
 
 A valid transport (one that follows the interface defined) must implement the following API:
@@ -107,12 +103,33 @@ A valid transport (one that follows the interface defined) must implement the fo
     - `listener.getAddrs()`
     - `<Promise> listener.close([options])`
 
+### Types
+
+#### Upgrader
+Upgraders have 2 methods: `upgradeOutbound` and `upgradeInbound`.
+- `upgradeOutbound` must be called and returned by `transport.dial`.
+- `upgradeInbound` must be called and the results must be passed to the `createListener` `handlerFunction` and the `connection` event handler, anytime a new connection is created.
+
+```js
+const connection = await upgrader.upgradeOutbound(multiaddrConnection)
+const connection = await upgrader.upgradeInbound(multiaddrConnection)
+```
+
+The `Upgrader` methods take a [MultiaddrConnection](#multiaddrconnection) and will return an `interface-connection` instance.
+
+#### MultiaddrConnection
+
+- `MultiaddrConnection`
+  - `sink<function(source)>`: A [streaming iterable sink](https://gist.github.com/alanshaw/591dc7dd54e4f99338a347ef568d6ee9#sink-it)
+  - `source<AsyncIterator>`: A [streaming iterable source](https://gist.github.com/alanshaw/591dc7dd54e4f99338a347ef568d6ee9#source-it)
+  - `conn`: The raw connection of the transport, such as a TCP socket.
+  - `remoteAddr<Multiaddr>`: The remote `Multiaddr` of the connection.
+
 ### Creating a transport instance
 
 - `JavaScript` - `const transport = new Transport({ upgrader, ...[options] })`
 
-Creates a new Transport instance. `options` is an JavaScript object that should include the necessary parameters for the transport instance. Options **MUST** include an Upgrader instance, as Transports will use this to return `interface-connection`
-instances from `transport.dial` and the listener `handlerFunction`.
+Creates a new Transport instance. `options` is an JavaScript object that should include the necessary parameters for the transport instance. Options **MUST** include an `Upgrader` instance, as Transports will use this to return `interface-connection` instances from `transport.dial` and the listener `handlerFunction`.
 
 **Note: Why is it important to instantiate a transport -** Some transports have state that can be shared between the dialing and listening parts. For example with libp2p-webrtc-star, in order to dial a peer, the peer must be part of some signaling network that is shared with the listener.
 
@@ -126,7 +143,7 @@ This method uses a transport to dial a Peer listening on `multiaddr`.
 
 `[options]` the options that may be passed to the dial. Must support the `signal` option (see below)
 
-Dial **MUST** call and return `upgrader.upgradeOutbound({ source, sink, conn, remoteAddr })`. The upgrader will return an [interface-connection](https://github.com/libp2p/interface-connection) instance.
+Dial **MUST** call and return `upgrader.upgradeOutbound(multiaddrConnection)`. The upgrader will return an [interface-connection](https://github.com/libp2p/interface-connection) instance.
 
 The dial may throw an `Error` instance if there was a problem connecting to the `multiaddr`.
 
@@ -159,7 +176,7 @@ try {
 
 - `JavaScript` - `const listener = transport.createListener([options], handlerFunction)`
 
-This method creates a listener on the transport. Implementations **MUST** call `upgrader.upgradeInbound({ source, sink, conn, remoteAddr })` and pass its results to the `handlerFunction` and any emitted `connection` events.
+This method creates a listener on the transport. Implementations **MUST** call `upgrader.upgradeInbound(multiaddrConnection)` and pass its results to the `handlerFunction` and any emitted `connection` events.
 
 `options` is an optional object that contains the properties the listener must have, in order to properly listen on a given transport/socket.
 
