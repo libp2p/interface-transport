@@ -55,7 +55,10 @@ module.exports = (common) => {
         finish = resolve
       })
 
-      const listener = transport.createListener((conn) => pipe(conn, conn))
+      const listener = transport.createListener((conn) => {
+        expect(upgradeSpy.returned(conn)).to.equal(true)
+        pipe(conn, conn)
+      })
 
       // Listen
       await listener.listen(addrs[0])
@@ -87,6 +90,7 @@ module.exports = (common) => {
         const listener = transport.createListener()
 
         listener.on('connection', async (conn) => {
+          expect(upgradeSpy.returned(conn)).to.equal(true)
           expect(upgradeSpy.callCount).to.equal(1)
           expect(conn).to.exist()
           await listener.close()

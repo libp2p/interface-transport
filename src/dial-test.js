@@ -62,6 +62,7 @@ module.exports = (common) => {
       const result = await pipe(s, conn, s)
 
       expect(upgradeSpy.callCount).to.equal(1)
+      expect(upgradeSpy.returned(conn)).to.equal(true)
       expect(result.length).to.equal(1)
       expect(result[0].toString()).to.equal('hey')
     })
