@@ -95,7 +95,7 @@ A valid transport (one that follows the interface defined) must implement the fo
 **Table of contents:**
 
 - type: `Transport`
-  - `new Transport([options])`
+  - `new Transport({ upgrader, ...[options] })`
   - `<Promise> transport.dial(multiaddr, [options])`
   - `transport.createListener([options], handlerFunction)`
   - type: `transport.Listener`
@@ -109,15 +109,16 @@ A valid transport (one that follows the interface defined) must implement the fo
 
 ### Creating a transport instance
 
-- `JavaScript` - `const transport = new Transport([options])`
+- `JavaScript` - `const transport = new Transport({ upgrader, ...[options] })`
 
-Creates a new Transport instance. `options` is an optional JavaScript object that should include the necessary parameters for the transport instance.
+Creates a new Transport instance. `options` is an JavaScript object that should include the necessary parameters for the transport instance. Options **MUST** include an Upgrader instance, as Transports will use this to return `interface-connection`
+instances from `transport.dial` and the listener `handlerFunction`.
 
 **Note: Why is it important to instantiate a transport -** Some transports have state that can be shared between the dialing and listening parts. For example with libp2p-webrtc-star, in order to dial a peer, the peer must be part of some signaling network that is shared with the listener.
 
 ### Dial to another peer
 
-- `JavaScript` - `const conn = await transport.dial(multiaddr, [options])`
+- `JavaScript` - `const connection = await transport.dial(multiaddr, [options])`
 
 This method uses a transport to dial a Peer listening on `multiaddr`.
 
@@ -125,7 +126,7 @@ This method uses a transport to dial a Peer listening on `multiaddr`.
 
 `[options]` the options that may be passed to the dial. Must support the `signal` option (see below)
 
-`conn` must implement the [interface-connection](https://github.com/libp2p/interface-connection) interface.
+Dial **MUST** call and return `upgrader.upgradeOutbound({ source, sink, conn, remoteAddr })`. The upgrader will return an [interface-connection](https://github.com/libp2p/interface-connection) instance.
 
 The dial may throw an `Error` instance if there was a problem connecting to the `multiaddr`.
 
@@ -158,7 +159,7 @@ try {
 
 - `JavaScript` - `const listener = transport.createListener([options], handlerFunction)`
 
-This method creates a listener on the transport.
+This method creates a listener on the transport. Implementations **MUST** call `upgrader.upgradeInbound({ source, sink, conn, remoteAddr })` and pass its results to the `handlerFunction` and any emitted `connection` events.
 
 `options` is an optional object that contains the properties the listener must have, in order to properly listen on a given transport/socket.
 
