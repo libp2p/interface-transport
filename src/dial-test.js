@@ -6,6 +6,7 @@ const dirtyChai = require('dirty-chai')
 const expect = chai.expect
 chai.use(dirtyChai)
 
+const { isValidTick } = require('./utils')
 const goodbye = require('it-goodbye')
 const { collect } = require('streaming-iterables')
 const pipe = require('it-pipe')
@@ -16,16 +17,18 @@ const sinon = require('sinon')
 module.exports = (common) => {
   const upgrader = {
     upgradeOutbound (multiaddrConnection) {
-      ['sink', 'source', 'remoteAddr', 'conn'].forEach(prop => {
+      ['sink', 'source', 'remoteAddr', 'conn', 'timeline'].forEach(prop => {
         expect(multiaddrConnection).to.have.property(prop)
       })
+      expect(isValidTick(multiaddrConnection.timeline.open)).to.equal(true)
 
       return { sink: multiaddrConnection.sink, source: multiaddrConnection.source }
     },
     upgradeInbound (multiaddrConnection) {
-      ['sink', 'source', 'remoteAddr', 'conn'].forEach(prop => {
+      ['sink', 'source', 'remoteAddr', 'conn', 'timeline'].forEach(prop => {
         expect(multiaddrConnection).to.have.property(prop)
       })
+      expect(isValidTick(multiaddrConnection.timeline.open)).to.equal(true)
 
       return { sink: multiaddrConnection.sink, source: multiaddrConnection.source }
     }
