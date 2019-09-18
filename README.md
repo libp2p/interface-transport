@@ -93,6 +93,7 @@ A valid transport (one that follows the interface defined) must implement the fo
 - type: `Transport`
   - `new Transport({ upgrader, ...[options] })`
   - `<Promise> transport.dial(multiaddr, [options])`
+  - `<Multiaddr[]> transport.filter(multiaddrs)`
   - `transport.createListener([options], handlerFunction)`
   - type: `transport.Listener`
     - event: 'listening'
@@ -176,6 +177,15 @@ try {
   controller.abort()
 // ----
 ```
+
+### Filtering Addresses
+
+- `JavaScript` - `const supportedAddrs = await transport.filter(multiaddrs)`
+
+When using a transport its important to be able to filter out `multiaddr`s that the transport doesn't support. A transport instance provides a filter method to return only the valid addresses it supports.
+
+`multiaddrs` must be an array of type [`multiaddr`](https://www.npmjs.com/multiaddr).
+Filter returns an array of `multiaddr`.
 
 ### Create a listener
 
