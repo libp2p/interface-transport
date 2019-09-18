@@ -13,21 +13,19 @@ const { isValidTick } = require('./utils')
 
 module.exports = (common) => {
   const upgrader = {
-    upgradeOutbound (multiaddrConnection) {
-      ['sink', 'source', 'remoteAddr', 'conn', 'timeline'].forEach(prop => {
+    _upgrade (multiaddrConnection) {
+      ['sink', 'source', 'remoteAddr', 'conn', 'timeline', 'close'].forEach(prop => {
         expect(multiaddrConnection).to.have.property(prop)
       })
       expect(isValidTick(multiaddrConnection.timeline.open)).to.equal(true)
 
-      return { sink: multiaddrConnection.sink, source: multiaddrConnection.source }
+      return multiaddrConnection
+    },
+    upgradeOutbound (multiaddrConnection) {
+      return upgrader._upgrade(multiaddrConnection)
     },
     upgradeInbound (multiaddrConnection) {
-      ['sink', 'source', 'remoteAddr', 'conn', 'timeline'].forEach(prop => {
-        expect(multiaddrConnection).to.have.property(prop)
-      })
-      expect(isValidTick(multiaddrConnection.timeline.open)).to.equal(true)
-
-      return { sink: multiaddrConnection.sink, source: multiaddrConnection.source }
+      return upgrader._upgrade(multiaddrConnection)
     }
   }
 
@@ -53,8 +51,10 @@ module.exports = (common) => {
 
     it('close listener with connections, through timeout', async () => {
       const upgradeSpy = sinon.spy(upgrader, 'upgradeInbound')
+      const listenerConns = []
 
       const listener = transport.createListener((conn) => {
+        listenerConns.push(conn)
         expect(upgradeSpy.returned(conn)).to.equal(true)
         pipe(conn, conn)
       })
@@ -80,6 +80,13 @@ module.exports = (common) => {
         // Closer the listener (will take a couple of seconds to time out)
         listener.close()
       ])
+
+      await socket1.close()
+
+      expect(isValidTick(socket1.timeline.close)).to.equal(true)
+      listenerConns.forEach(conn => {
+        expect(isValidTick(conn.timeline.close)).to.equal(true)
+      })
 
       // 2 dials = 2 connections upgraded
       expect(upgradeSpy.callCount).to.equal(2)

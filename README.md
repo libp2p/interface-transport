@@ -122,8 +122,13 @@ The `Upgrader` methods take a [MultiaddrConnection](#multiaddrconnection) and wi
 - `MultiaddrConnection`
   - `sink<function(source)>`: A [streaming iterable sink](https://gist.github.com/alanshaw/591dc7dd54e4f99338a347ef568d6ee9#sink-it)
   - `source<AsyncIterator>`: A [streaming iterable source](https://gist.github.com/alanshaw/591dc7dd54e4f99338a347ef568d6ee9#source-it)
+  - `close<function(Error)>`: A method for closing the connection
   - `conn`: The raw connection of the transport, such as a TCP socket.
   - `remoteAddr<Multiaddr>`: The remote `Multiaddr` of the connection.
+  - `[localAddr<Multiaddr>]`: An optional local `Multiaddr` of the connection.
+  - `timeline<object>`: A hash map of connection time events
+    - `open<number>`: The time in ticks the connection was opened
+    - `close<number>`: The time in ticks the connection was closed
 
 ### Creating a transport instance
 
