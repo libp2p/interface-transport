@@ -17,8 +17,6 @@ Publishing a test suite as a module lets multiple modules all ensure compatibili
 
 The purpose of this interface is not to reinvent any wheels when it comes to dialing and listening to transports. Instead, it tries to provide a uniform API for several transports through a shimmed interface.
 
-The API is presented with both Node.js and Go primitives, however there are no actual limitations for it to be extended for any other language, pushing forward the cross compatibility and interop through diferent stacks.
-
 ## Lead Maintainer
 
 [Jacob Heun](https://github.com/jacobheun/)
@@ -133,7 +131,7 @@ The `Upgrader` methods take a [MultiaddrConnection](#multiaddrconnection) and wi
 
 ### Creating a transport instance
 
-- `JavaScript` - `const transport = new Transport({ upgrader, ...[options] })`
+- `const transport = new Transport({ upgrader, ...[options] })`
 
 Creates a new Transport instance. `options` is an JavaScript object that should include the necessary parameters for the transport instance. Options **MUST** include an `Upgrader` instance, as Transports will use this to return `interface-connection` instances from `transport.dial` and the listener `handlerFunction`.
 
@@ -141,7 +139,7 @@ Creates a new Transport instance. `options` is an JavaScript object that should 
 
 ### Dial to another peer
 
-- `JavaScript` - `const connection = await transport.dial(multiaddr, [options])`
+- `const connection = await transport.dial(multiaddr, [options])`
 
 This method uses a transport to dial a Peer listening on `multiaddr`.
 
@@ -180,7 +178,7 @@ try {
 
 ### Filtering Addresses
 
-- `JavaScript` - `const supportedAddrs = await transport.filter(multiaddrs)`
+- `const supportedAddrs = await transport.filter(multiaddrs)`
 
 When using a transport its important to be able to filter out `multiaddr`s that the transport doesn't support. A transport instance provides a filter method to return only the valid addresses it supports.
 
@@ -189,7 +187,7 @@ Filter returns an array of `multiaddr`.
 
 ### Create a listener
 
-- `JavaScript` - `const listener = transport.createListener([options], handlerFunction)`
+- `const listener = transport.createListener([options], handlerFunction)`
 
 This method creates a listener on the transport. Implementations **MUST** call `upgrader.upgradeInbound(multiaddrConnection)` and pass its results to the `handlerFunction` and any emitted `connection` events.
 
@@ -206,7 +204,7 @@ The listener object created may emit the following events:
 
 ### Start a listener
 
-- `JavaScript` - `await listener.listen(multiaddr)`
+- `await listener.listen(multiaddr)`
 
 This method puts the listener in `listening` mode, waiting for incoming connections.
 
@@ -214,13 +212,13 @@ This method puts the listener in `listening` mode, waiting for incoming connecti
 
 ### Get listener addrs
 
-- `JavaScript` - `listener.getAddrs()`
+- `listener.getAddrs()`
 
 This method returns the addresses on which this listener is listening. Useful when listening on port 0 or any interface (0.0.0.0).
 
 ### Stop a listener
 
-- `JavaScript` - `await listener.close([options])`
+- `await listener.close([options])`
 
 This method closes the listener so that no more connections can be opened on this transport instance.
 
