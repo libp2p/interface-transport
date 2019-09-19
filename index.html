@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8'>
-  <title>interface-transport 0.6.1 | Documentation</title>
+  <title>interface-transport 0.7.0 | Documentation</title>
   <meta name='description' content='A test suite and interface you can use to implement a transport.'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>interface-transport</h3>
-          <div class='mb1'><code>0.6.1</code></div>
+          <div class='mb1'><code>0.7.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -29,6 +29,16 @@
                   href='#intro'
                   class="h5 bold black caps">
                   Intro
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#isvalidtick'
+                  class="">
+                  isValidTick
                   
                 </a>
                 
@@ -69,6 +79,91 @@
 
   
 </section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='isvalidtick'>
+      isValidTick
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/libp2p/interface-transport/blob/c5bcbcf1bb10865404f4f4d27e9ed45c48ec6055/src/utils/index.js#L11-L15'>
+      <span>src/utils/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A tick is considered valid if it happened between now
+and <code>ms</code> milliseconds ago</p>
+
+    <div class='pre p1 fill-light mt0'>isValidTick(date: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, ms: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>date</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    Time in ticks
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ms</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>5000</code>)</code>
+	    max milliseconds that should have expired
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
           
         
       </div>
