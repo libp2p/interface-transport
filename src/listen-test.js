@@ -32,9 +32,10 @@ module.exports = (common) => {
   describe('listen', () => {
     let addrs
     let transport
+    let listenerOpts
 
     before(async () => {
-      ({ transport, addrs } = await common.setup({ upgrader }))
+      ({ transport, addrs, listenerOpts } = await common.setup({ upgrader }))
     })
 
     after(() => common.teardown && common.teardown())
@@ -44,7 +45,7 @@ module.exports = (common) => {
     })
 
     it('simple', async () => {
-      const listener = transport.createListener((conn) => {})
+      const listener = transport.createListener(listenerOpts, (conn) => {})
       await listener.listen(addrs[0])
       await listener.close()
     })

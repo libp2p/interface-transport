@@ -36,15 +36,16 @@ module.exports = (common) => {
     let transport
     let connector
     let listener
+    let listenerOpts
 
     before(async () => {
-      ({ addrs, transport, connector } = await common.setup({ upgrader }))
+      ({ addrs, transport, connector, listenerOpts } = await common.setup({ upgrader }))
     })
 
     after(() => common.teardown && common.teardown())
 
     beforeEach(() => {
-      listener = transport.createListener((conn) => pipe(conn, conn))
+      listener = transport.createListener(listenerOpts, (conn) => pipe(conn, conn))
       return listener.listen(addrs[0])
     })
 

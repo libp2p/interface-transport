@@ -72,8 +72,9 @@ describe('compliance', () => {
           network.connect = connect
         }
       }
+      const listenerOpts = {}
 
-      return { transport, addrs, connector }
+      return { transport, addrs, connector, listenerOpts }
     },
     teardown () {
       // Clean up any resources created by setup()
