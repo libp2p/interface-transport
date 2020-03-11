@@ -1,5 +1,7 @@
-interface-transport
-===================
+⛔️ DEPRECATED: interface-transport is now included in [libp2p-interfaces](https://github.com/libp2p/js-interfaces)
+======
+
+# interface-transport
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://protocol.ai)
 [![](https://img.shields.io/badge/project-libp2p-yellow.svg?style=flat-square)](http://libp2p.io/)
